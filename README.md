@@ -13,9 +13,9 @@ Features:
 
 ## Contents
 
-Distributed scripts to create and maintain customized bootable ISOs for portable and secure usage.
-Testing takes place inside a VirtualBox VM.
-Creation of a bootable USB stick has to be done on a PC/Laptop with USB3 support.
+* Distributed scripts to create and maintain customized bootable ISOs for portable and secure usage.
+* Testing takes place inside a VirtualBox VM.
+* Creation of a bootable USB stick has to be done on a PC/Laptop with USB3 support.
 
 ## Procedure
 

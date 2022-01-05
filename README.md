@@ -1,4 +1,4 @@
-# brucelinux
+# bruce linux
 
 Distributed scripts to create and maintain customized bootable ISOs for portable and secure usage.
 Testing takes place inside a VirtualBox VM.

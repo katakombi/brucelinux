@@ -18,8 +18,8 @@ Creation of a bootable USB stick has to be done on a PC/Laptop with USB3 support
 
 ## Procedure
 
-* run [a bootstrap](BOOTSTRAP.md) of the ISO
+* [Bootstrapping](BOOTSTRAP.md)
 
-* the image can be [maintained](MAINTENANCE.md) like this
+* [Maintenance](MAINTENANCE.md)
 
-* to produce the [USB stick](USBSTICK.md)
+* [USB stick creation](USBSTICK.md)

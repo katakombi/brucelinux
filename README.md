@@ -5,9 +5,10 @@
 Bruce is a framework to create, maintain and distribute customized Linux builds for a target user group.
 Features:
 
-* Immutable base system which does not touch locally installed operating systems
-* Password-protected and encrypted
 * Bootable on most x64-compatible computers capable of UEFI boot
+* Immutable base system 
+* To be used without touching locally installed operating systems
+* Password-protected and encrypted
 * Updating mechanism allowing OTA updates via https (e.g. Nextcloud)
 
 ## Contents

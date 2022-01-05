@@ -7,7 +7,7 @@ Features:
 
 * Bootable on most x64-compatible computers capable of UEFI boot
 * Temporary modifiable system while immutable across reboots
-* To be used without touching locally installed operating systems
+* Can be used without touching locally installed operating systems
 * Password-protected and encrypted
 * Updating mechanism allowing OTA updates via https (e.g. Nextcloud)
 

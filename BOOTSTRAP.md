@@ -1,4 +1,4 @@
-# Bootstrapping a customized bootable Linux ISO
+# Bootstrapping Bruce Linux
 
 ## Intro
 
@@ -45,7 +45,7 @@ apt update
 
 apt purge -y hexchat* thunderbird* libreoffice* warpinator rhythmbox celluloid ubiquity-ubuntu-artwork ubiquity-slideshow-mint ubiquity-frontend-gtk ubiquity default-jre openjdk-11-jre default-jre-headless openjdk-11-jre-headless hypnotix firefox firefox-locale-en
 
-apt -y install screen vim yad xdotool numlockx chromium imagemagick-6.q16 virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms qtqr brave-browser
+apt -y install keepassxc screen vim yad xdotool numlockx chromium imagemagick-6.q16 virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms qtqr brave-browser
 
 # updating system packages
 apt upgrade 

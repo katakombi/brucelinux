@@ -2,14 +2,8 @@
 
 ## Intro
 
-This setup will work on a linux mint, ubuntu or debian machine. First fetch docs & code.
-
-If SSH key installed:
-```
-git clone git@github.com:katakombi/brucelinux.git
-```
-
-Install some requirements:
+This setup will work on a linux mint, ubuntu or debian machine. First clone this repo.
+Then install some requirements:
 ```
 sudo apt-get install squashfs-tools genisoimage 
 ```

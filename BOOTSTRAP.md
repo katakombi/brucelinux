@@ -34,20 +34,7 @@ sudo mount -o loop linuxmint-base.iso mnt
 sudo rsync --exclude=/casper/filesystem.squashfs -a mnt/ extract-cd
 time sudo unsquashfs mnt/casper/filesystem.squashfs
 sudo umount mnt
-sudo mv squashfs-root chroot
-```
-
-### Chroot
-```
-cat << EOF > bashrc
-echo "Ready to modify the ISO..."
-export HOME=/root
-export LC_ALL=C
-export PS1="\[\e[5;31;1m\]brucelinux\[\e[0m\] $PS1"
-EOF
-
-sudo mv bashrc chroot/root/.bashrc
-sudo cp /etc/resolv.conf chroot/etc/
+sudo mv squashfs-root chroot#
 
 ./chroot.sh
 ```

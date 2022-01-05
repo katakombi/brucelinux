@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# FIXME see whether this script requires devel.cfg
-if [[ "$CHROOTDIR" == "" ]]; then
+if [[ "$BL_CHROOTDIR" == "" ]]; then
 	CHDIR=chroot
 else
-	CHDIR=$CHROOTDIR
+	CHDIR=$BL_CHROOTDIR
 fi
 
 if [ ! -d $CHDIR ]; then

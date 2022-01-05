@@ -63,15 +63,11 @@ vimdiff /packages.lst /packages.lst.orig
 
 ```
 #### Setup system
-FIXME rc.local scripts...
 ```
 # enable numlock
 sed -i.bak 's/NUMLOCK=auto/NUMLOCK=on/' /etc/default/numlockx
 
-systemctl enable ufw # TODO enable in /etc/rc.local!
-
-dpkg-reconfigure tzdata # select Europe/Berlin
-dpkg-reconfigure locales # mark de_DE.UTF-8 and en_US.UTF8; select de_DE.UTF-8 as default
+systemctl enable ufw # FIXME this does not apply!
 
 cat << EOF > /etc/systemd/system/rc-local.service
 [Unit]
@@ -123,9 +119,6 @@ EOF
 systemctl enable rc-local
 systemctl enable run-before-shutdown.service 
 systemctl enable run-before-reboot.service
-
-# these files will be copied in-place right before the ISO build
-# /etc/{crypttab,rc.local,on-shutdown.sh,on-reboot.sh,info/*}
 ```
 
 Now exit the chroot!

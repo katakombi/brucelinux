@@ -28,7 +28,7 @@ sudo mount -o loop linuxmint-base.iso mnt
 sudo rsync --exclude=/casper/filesystem.squashfs -a mnt/ extract-cd
 time sudo unsquashfs mnt/casper/filesystem.squashfs
 sudo umount mnt
-sudo mv squashfs-root chroot#
+sudo mv squashfs-root chroot
 
 ./chroot.sh
 ```

@@ -20,7 +20,7 @@ We derive our customized ISO from an official Linux Mint release.
 This bootstrapping procedure has to be repeated from scratch after every major LTS distro release (typically every second year).
 
 ```
-sudo rm -rf edit extract-cd
+sudo rm -rf chroot extract-cd
 mkdir -p {extract-cd,mnt}
 wget -nc http://mirror.bauhuette.fh-aachen.de/linuxmint-cd/testing/linuxmint-20.3-mate-64bit-beta.iso -O linuxmint-base.iso
 

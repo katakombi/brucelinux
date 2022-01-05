@@ -36,19 +36,16 @@ Your project is ready for modifications, make whatever changes you want like add
 
 #### Remove/Install/Upgrade packages
 ```
-apt update
-
 dpkg-query --show --showformat='${Installed-Size}\t${Package}\n' | sort -rh > /packages.lst.orig
 
 apt -y install apt-transport-https curl
 curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+apt update
 
 apt purge -y hexchat* thunderbird* libreoffice* warpinator rhythmbox celluloid ubiquity-ubuntu-artwork ubiquity-slideshow-mint ubiquity-frontend-gtk ubiquity default-jre openjdk-11-jre default-jre-headless openjdk-11-jre-headless
 
-apt -y install anydesk screen vim yad xdotool numlockx chromium imagemagick-6.q16 virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms qtqr brave-browser
-
-# TODO download/install Zoiper ...
+apt -y install screen vim yad xdotool numlockx chromium imagemagick-6.q16 virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms qtqr brave-browser
 
 # updating system packages
 apt upgrade 

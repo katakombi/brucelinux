@@ -16,9 +16,9 @@ This bootstrapping procedure has to be repeated from scratch after every major L
 ```
 sudo rm -rf chroot extract-cd
 mkdir -p {extract-cd,mnt}
-wget -nc http://mirror.bauhuette.fh-aachen.de/linuxmint-cd/testing/linuxmint-20.3-mate-64bit-beta.iso -O linuxmint-base.iso
+wget -nc http://mirror.bauhuette.fh-aachen.de/linuxmint-cd/stable/linuxmint-20.3-mate-64bit.iso -O linuxmint-base.iso
 
-if sha256sum linuxmint-base.iso | grep e065a4ad36d7e6d31ba0a3ae43836ae8e4232f5b80107da81c50746192e7de2c ; then
+if sha256sum linuxmint-base.iso | grep 27de0b1e6d743d0efc2c193ec88d56a49941ce3e7d58b03730a4bb1895c25be5; then
   echo "ISO verified successfully!"
 else
   echo "Please check ISO - it is unverified and might be wrong!"

@@ -1,10 +1,11 @@
 #!/bin/bash
 
 if [[ "$BL_CHROOTDIR" == "" ]]; then
-	CHDIR=chroot
-else
-	CHDIR=$BL_CHROOTDIR
+	echo "Run 'source devel.cfg' first!"
+	exit 1
 fi
+
+CHDIR=$BL_CHROOTDIR
 
 if [ ! -d $CHDIR ]; then
 	echo "chroot directory $CHDIR nonexistent! Bootstrap first!"
@@ -32,7 +33,7 @@ EOF
 
 sudo cp /etc/resolv.conf $CHDIR/etc/resolv.conf
 
-echo CHROOT
+echo CHROOT $CHDIR
 sudo chroot $CHDIR
 
 echo Updating packages.lst

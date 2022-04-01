@@ -19,11 +19,11 @@ sudo sh -c 'cat '$BL_CHROOTDIR'/boot/initrd.img > extract-cd/casper/initrd.lz'
 
 echo ///CREATING BOOT MENU///
 D=$(date +"%Y-%m-%d")
-V=$(./generate-versionname.sh "$(date)")
+V=$(./misc/generate-versionname.sh "$(date)")
 
 echo "$D: building $V"
 
-sudo cp config/$BL_PROFILE/boot.png extract-cd/isolinux/boot.png
+sudo cp $BL_SPLASHSCREEN extract-cd/isolinux/boot.png
 
 cat << EOF | sudo tee extract-cd/isolinux/isolinux.cfg
 default vesamenu.c32

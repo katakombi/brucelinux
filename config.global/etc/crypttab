@@ -1,0 +1,2 @@
+# <target name>	<source device>		<key file>	<options>
+ENV_P4LABEL UUID=ENV_P4UUID none luks,discard

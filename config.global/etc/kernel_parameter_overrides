@@ -1,0 +1,22 @@
+# defaults
+
+. /etc/kernel_parameter_defauls
+
+# override with kernel params
+for x in $(cat /proc/cmdline); do
+  if [[ $x == username=* ]]; then
+    USERNAME="${x#username=}"
+  fi
+  if [[ $x == netcfg=* ]]; then
+    NETCFG="${x#netcfg=}"
+  fi
+  if [[ $x == bootcfg=* ]]; then
+    BOOTCFG="${x#bootcfg=}"
+  fi
+done
+
+mkdir -p /etc/info/
+echo $USERNAME > /etc/info/username
+echo $NETCFG   > /etc/info/netcfg
+echo $BOOTCFG  > /etc/info/bootcfg
+

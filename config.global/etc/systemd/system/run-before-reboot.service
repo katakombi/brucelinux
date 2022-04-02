@@ -1,0 +1,12 @@
+[Unit]
+Description=Run my custom task at reboot
+DefaultDependencies=no
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/on-reboot.sh
+TimeoutStartSec=0
+
+[Install]
+WantedBy=reboot.target

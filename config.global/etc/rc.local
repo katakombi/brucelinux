@@ -3,10 +3,10 @@
 . /etc/kernel_parameter_overrides
 
 # mount encrypted home
-mount /dev/mapper/ENV_P4LABEL /home
+mount /dev/mapper/BL_P4LABEL /home
 
 # set default password for default user
-SEEDED_PWD="$(openssl passwd -6 -in ENV_USERKEYFILE)"
+SEEDED_PWD="$(openssl passwd -6 -in BL_USERKEYFILE)"
 
 # if no home directory exists provision all files from /etc/skel
 if [[ ! -d /home/$USERNAME ]]; then

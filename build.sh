@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [[ "$BL_CONFIGDIR" == "" ]]; then
-        echo "Run 'source devel.cfg' first!"
+if [[ "$BL_WORKDIR" == "" ]]; then
+        echo "Run 'source ./init.sh' first!"
         exit 1
 fi
 
@@ -30,7 +30,7 @@ default vesamenu.c32
 timeout 33
 
 menu background boot.png
-menu title $BL_PROFILECAP Linux\n$V - n$D
+menu title $BL_PROFILECAP Linux\\n$V - $D
 
 menu color screen       37;40      #80ffffff #00000000 std
 MENU COLOR border       30;44   #40ffffff #a0000000 std
@@ -54,7 +54,7 @@ MENU HELPMSGENDROW 29
 label live
   menu label $BL_PROFILECAP Linux
   kernel /casper/vmlinuz
-  append file=/cdrom/preseed/linuxmint.seed boot=casper initrd=/casper/initrd.lz bootcfg=$BL_TEST_BOOTCFG netcfg=$BL_TEST_NETCFG username=$BL_TEST_USERNAME quiet splash --
+  append file=/cdrom/preseed/linuxmint.seed boot=casper initrd=/casper/initrd.lz bootcfg=$BL_TEST_BOOTCFG netcfg=$BL_TEST_NETCFG username=$BL_USERNAME quiet splash --
 menu default
 label factoryreset 
   menu label Factory reset
@@ -70,15 +70,11 @@ sudo mkdir -p iso/etc/info
 echo "$V" | sudo tee iso/etc/info/version
 echo "$D" | sudo tee iso/etc/info/date
 
-sudo rsync -ravhlp config/$BL_PROFILE/etc/ iso/etc
-sudo sed -i 's|BL_USERKEYFILE|'${BL_USERKEYFILE#$CHROOTDIR}'|' iso/etc/rc.local
+sudo rsync -ravhlp config.global/ iso
+sudo sed -i 's|BL_USERKEYFILE|'${BL_USERKEYFILE#$BL_CHROOTDIR}'|' iso/etc/rc.local
 sudo sed -i 's/BL_P4LABEL/'$BL_P4LABEL'/' iso/etc/rc.local
 sudo sed -i 's/BL_P4UUID/'$P4UUID'/' iso/etc/crypttab
 sudo sed -i 's/BL_P4LABEL/'$P4LABEL'/' iso/etc/crypttab
-
-#sudo rsync -ravhlp config/$BL_PROFILE/usr/local/* iso/usr/local/
-#sudo chown -R root.root iso/usr/local/
-#sudo chmod -R 755 iso/usr/local/
 
 # TODO make this independent of $PROFILE and adjust groups
 #USERGROUPS="disk,audio,video,users,dip,plugdev,scanner,davfs2,adm,sudo"
@@ -87,11 +83,12 @@ sudo chroot iso/ useradd -U -M -s /bin/bash -G $USERGROUPS $BL_DEFAULT_USER
 
 echo ///PATCHING INITRD///
 
-sudo sed -i '/^. \/scripts\/lupin-helpers.*/a . \/scripts\/brucelinux' iso/usr/share/initramfs-tools/scripts/casper-premount/20iso_scan
-sudo rsync -rahlp config.global/initrd/hooks/brucelinux iso/usr/share/initramfs-tools/hooks/brucelinux
-sudo rsync -rahlp config.global/initrd/scripts/brucelinux iso/usr/share/initramfs-tools/scripts/brucelinux
-sudo sed -i 's|ENV_P4LABEL|'$P4LABEL'|' iso/usr/share/initramfs-tools/scripts/brucelinux
-sudo sed -i 's|ENV_P4UUID|'$P4UUID'|' iso/usr/share/initramfs-tools/scripts/brucelinux
+sudo sed -i '/^. \/scripts\/lupin-helpers.*/a . \/scripts\/bruce' iso/usr/share/initramfs-tools/scripts/casper-premount/20iso_scan
+sudo rsync -rahlp config.global/initrd/hooks/bruce iso/usr/share/initramfs-tools/hooks/bruce
+sudo rsync -rahlp config.global/initrd/scripts/bruce iso/usr/share/initramfs-tools/scripts/bruce
+sudo sed -i 's|BL_P4LABEL|'$BL_P4LABEL'|' iso/usr/share/initramfs-tools/scripts/bruce
+sudo sed -i 's|BL_P4UUID|'$BL_P4UUID'|' iso/usr/share/initramfs-tools/scripts/bruce
+sudo sed -i 's|BL_P2UUID|'$BL_P2UUID'|' iso/usr/share/initramfs-tools/scripts/bruce
 
 sudo sh -c "
   mount -t proc none iso/proc

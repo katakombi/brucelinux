@@ -1,15 +1,10 @@
 #!/bin/bash
 
-if [[ "$BL_CONFIGDIR" == "" ]]; then
-        echo "Run './init.sh' first!"
-        exit 1
-fi
-
-cd $BL_CONFIGDIR
-
 if [[ -d $BL_CHROOTDIR ]]; then
 	echo "Chroot $BL_CHROOTDIR exists already, refusing to bootstrap. Delete it manually to bootstrap from scratch!"
 	exit 2
+else
+	source ./init.sh
 fi
 
 echo "Bootstrapping chroot $BL_CHROOTDIR from Linux Mint ISO..."
@@ -29,5 +24,38 @@ sudo rsync --exclude=/casper/filesystem.squashfs -a mnt/ extract-cd
 time sudo unsquashfs mnt/casper/filesystem.squashfs
 sudo umount mnt
 sudo mv squashfs-root $BL_CHROOTDIR
+
+echo "Running the customization script..."
+
+CHDIR=$BL_CHROOTDIR
+
+echo Bind mounting
+sudo mount -t proc none $CHDIR/proc
+sudo mount -o bind /dev $CHDIR/dev
+sudo mount -o bind /dev/pts $CHDIR/dev/pts
+
+cat << EOF | sudo tee $CHDIR/root/.bashrc > /dev/null
+echo "Ready to modify the ISO..."
+export HOME=/root
+export LC_ALL=C
+export PS1="\[\e[5;31;1m\]brucelinux\[\e[0m\] $PS1"
+EOF
+
+sudo cp /etc/resolv.conf $CHDIR/etc/resolv.conf
+sudo cp config/${BL_PROFILE}.sh $BL_CHROOTDIR/tmp
+
+echo CHROOT $CHDIR bash -c /tmp/${BL_PROFILE}.sh 
+sudo chroot $CHDIR bash -c /tmp/${BL_PROFILE}.sh 
+
+
+echo Updating packages.lst
+sudo chroot $CHDIR su -c "dpkg-query --show --showformat='\${Installed-Size}\t\${Package}\n' | sort -rh > /packages.lst"
+sudo chroot $CHDIR su -c "cat /packages.lst | awk '{if ((\$1>0)&&NF==2) sum+=\$1}END{printf(i\"Total package size in kB: %i\n\", sum/1024)}'"
+
+echo Cleaning up
+sudo rm -rf $CHDIR/tmp/* $CHDIR/root/.bash_history
+sudo umount $CHDIR/dev/pts
+sudo umount $CHDIR/dev
+sudo umount $CHDIR/proc
 
 echo "Done!"

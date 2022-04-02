@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$BL_CHROOTDIR" == "" ]]; then
-	echo "Run 'source devel.cfg' first!"
+	echo "Run 'source ./init.sh' first!"
 	exit 1
 fi
 

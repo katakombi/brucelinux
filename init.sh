@@ -24,18 +24,17 @@ export BL_P2UUID="f5cf619e-d1cb-4b7e-b8b8-f7d0dc3c37c0"
 export BL_P3UUID="85c6e7c8-d0bf-422b-ae77-059449a911df"
 export BL_P4UUID="a39ce5cb-d7d0-42d1-b433-3b2d8df10d7f"
 
-echo "///SOURCING PROFILE $BL_PROFILE///"
-source config/$BL_PROFILE.cfg
-
 export BL_CHROOTDIR="chroot/$BL_PROFILE"
 
 if [[ -d $BL_CHROOTDIR ]]; then
     echo "$BL_CHROOTDIR found ..."
 else
-    echo "Run ./bootstrap.sh, then rerun $0!"
+    echo "$BL_CHROOTDIR not found ..."
     return 1;
 fi
 
+echo "///SOURCING PROFILE $BL_PROFILE///"
+source config/$BL_PROFILE.cfg
 
 export BL_MASTERKEYFILE="$BL_CHROOTDIR/usr/share/initramfs-tools/scripts/casper-premount/master.secret"
 export BL_USERKEYFILE="$BL_CHROOTDIR/usr/share/initramfs-tools/scripts/casper-premount/user.secret"
@@ -86,5 +85,5 @@ if ! mountpoint iso/ > /dev/null ; then
   sudo mount -t tmpfs -o size=8096m isobuild iso/
 fi
 
-export BL_CONFIGDIR="$PWD"
+export BL_WORKDIR="$PWD"
 echo "///DONE///"

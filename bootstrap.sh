@@ -1,15 +1,14 @@
 #!/bin/bash
 
-if [[ -d $BL_CHROOTDIR ]]; then
-	echo "Chroot $BL_CHROOTDIR exists already, refusing to bootstrap. Delete it manually to bootstrap from scratch!"
-	exit 2
-else
-	source ./init.sh
+sudo rm -rf $BL_CHROOTDIR extract-cd squashfs-root
+
+if [[ -z $BL_CHROOTDIR ]]; then
+	echo "run 'source ./init.sh' before!"
+	exit 1
 fi
 
 echo "Bootstrapping chroot $BL_CHROOTDIR from Linux Mint ISO..."
 
-sudo rm -rf $BL_CHROOTDIR extract-cd squashfs-root
 mkdir -p {extract-cd,mnt,chroot}
 wget -nc http://mirror.bauhuette.fh-aachen.de/linuxmint-cd/stable/linuxmint-20.3-mate-64bit.iso -O linuxmint-base.iso
 

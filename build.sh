@@ -70,25 +70,24 @@ sudo mkdir -p iso/etc/info
 echo "$V" | sudo tee iso/etc/info/version
 echo "$D" | sudo tee iso/etc/info/date
 
-sudo rsync -ravhlp config.global/ iso
+sudo rsync -ravhlp config.global/ iso       # global files
+sudo rsync -ravhlp config/$BL_PROFILE/ iso  # profile-specific files/overrides
+
+echo ///PATCHING///
+
+sudo sed -i '/^. \/scripts\/lupin-helpers.*/a . \/scripts\/bruce' iso/usr/share/initramfs-tools/scripts/casper-premount/20iso_scan
+sudo sed -i 's|BL_P4LABEL|'$BL_P4LABEL'|' iso/usr/share/initramfs-tools/scripts/bruce
+sudo sed -i 's|BL_P4UUID|'$BL_P4UUID'|' iso/usr/share/initramfs-tools/scripts/bruce
+sudo sed -i 's|BL_P2UUID|'$BL_P2UUID'|' iso/usr/share/initramfs-tools/scripts/bruce
 sudo sed -i 's|BL_USERKEYFILE|'${BL_USERKEYFILE#$BL_CHROOTDIR}'|' iso/etc/rc.local
 sudo sed -i 's/BL_P4LABEL/'$BL_P4LABEL'/' iso/etc/rc.local
-sudo sed -i 's/BL_P4UUID/'$P4UUID'/' iso/etc/crypttab
-sudo sed -i 's/BL_P4LABEL/'$P4LABEL'/' iso/etc/crypttab
+sudo sed -i 's/BL_P4UUID/'$BL_P4UUID'/' iso/etc/crypttab
+sudo sed -i 's/BL_P4LABEL/'$BL_P4LABEL'/' iso/etc/crypttab
 
 # TODO make this independent of $PROFILE and adjust groups
 #USERGROUPS="disk,audio,video,users,dip,plugdev,scanner,davfs2,adm,sudo"
 USERGROUPS="disk,audio,video,users,dip,plugdev,scanner"
-sudo chroot iso/ useradd -U -M -s /bin/bash -G $USERGROUPS $BL_DEFAULT_USER
-
-echo ///PATCHING INITRD///
-
-sudo sed -i '/^. \/scripts\/lupin-helpers.*/a . \/scripts\/bruce' iso/usr/share/initramfs-tools/scripts/casper-premount/20iso_scan
-sudo rsync -rahlp config.global/initrd/hooks/bruce iso/usr/share/initramfs-tools/hooks/bruce
-sudo rsync -rahlp config.global/initrd/scripts/bruce iso/usr/share/initramfs-tools/scripts/bruce
-sudo sed -i 's|BL_P4LABEL|'$BL_P4LABEL'|' iso/usr/share/initramfs-tools/scripts/bruce
-sudo sed -i 's|BL_P4UUID|'$BL_P4UUID'|' iso/usr/share/initramfs-tools/scripts/bruce
-sudo sed -i 's|BL_P2UUID|'$BL_P2UUID'|' iso/usr/share/initramfs-tools/scripts/bruce
+sudo chroot iso/ useradd -U -M -s /bin/bash -G $USERGROUPS $BL_USERNAME
 
 sudo sh -c "
   mount -t proc none iso/proc
@@ -103,7 +102,7 @@ sudo sh -c 'cat iso/boot/vmlinuz > extract-cd/casper/vmlinuz'
 sudo sh -c 'cat iso/boot/initrd.img > extract-cd/casper/initrd.lz'
 
 echo ///MERGING USER PROFILE///
-
+echo TODO
 #rsync -rahp --delete $SOURCE/$PROFILE/home.tgz skel/$PROFILE/home.tgz
 #sudo sh -c 'cp skel/'$PROFILE'/home.tgz iso/etc/skel'
 #cd iso/etc/skel/ && sudo sh -c 'tar -xzpf home.tgz && rm -f home.tgz' && cd ../../../
@@ -119,6 +118,6 @@ time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs -comp zstd -b 256
 sudo rm -rf extract-cd/MD5SUM 
 
 cd extract-cd && find -type f -print0 | sudo xargs -0 md5sum | grep -v isolinux/boot.cat | sudo tee MD5SUM && cd ..
-sudo mkisofs -r -V "$V_$D" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $BL_PROFILE.iso extract-cd && sudo chmod 777 $BL_PROFILE.iso
+sudo mkisofs -r -V "$V" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $BL_PROFILE.iso extract-cd && sudo chmod 777 $BL_PROFILE.iso
 
 echo ///DONE///

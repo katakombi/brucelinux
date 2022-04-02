@@ -1,0 +1,70 @@
+# defaults
+bootcfg=vbox
+
+bootcfg=
+for x in $(cat /proc/cmdline); do
+        case $x in
+                bootcfg=*)
+                        bootcfg=${x#bootcfg=}
+                        ;;
+        esac
+done
+
+if [[ "$bootcfg" == "vbox" ]]; then
+	echo "Booting ISO in VirtualBox mode..."
+	plymouth message --text="Using ISO in VirtualBox mode..."
+fi
+if [[ "$bootcfg" == "local" ]]; then
+	echo "Booting ISO from a local disk..."
+	plymouth message --text="Booting ISO from a local disk..."
+fi
+if [[ "$bootcfg" == "pxe" ]]; then
+	echo "Booting ISO in PXE mode..."
+        plymouth message --text="Using ISO in PXE boot mode..."
+fi
+if [[ "$bootcfg" == "mobile" ]]; then
+	echo "Waiting for encrypted partition on storage device..."
+	plymouth message --text="Waiting for encrypted partition on storage device..."
+
+	# loop until the device is available
+	while test ! -e /dev/disk/by-uuid/BL_P4UUID; do 
+		echo "Waiting for partition UUID..."
+		plymouth message --text="Waiting for partition UUID..."
+		sleep 1
+	done
+
+	echo "Unlocking encrypted system partition..."
+	plymouth message --text="Unlocking encrypted system partition..."
+	/usr/sbin/cryptsetup luksOpen --key-file=/scripts/casper-premount/master.secret /dev/disk/by-uuid/BL_P2UUID dm-0
+	echo "Done"
+	plymouth message --text="Loading system image into memory..."
+fi
+
+for x in $(cat /proc/cmdline); do
+    if [[ "$x" == "factoryreset" ]]; then
+	PLABEL="BL_P4LABEL"
+        PUUID="BL_P4UUID"
+        PDEVICE="/dev/disk/by-uuid/$PUUID"
+	echo "Erasing user profile and resetting to default user profile/password..."
+	plymouth message --text="Erasing user profile and resetting to default user profile/password..."
+        for countdown in $(seq 10 -1 0); do
+		sleep 1;
+		echo "$countdown..."
+		plymouth message --text="Erasing user profile and resetting to default user profile/password in $countdown seconds..."
+	done;
+	plymouth message --text="Erasing..."
+        cat /scripts/casper-premount/user.secret | \
+            /usr/sbin/cryptsetup -q --pbkdf-force-iterations=90000 --uuid=$PUUID --type=luks1 --cipher aes-xts-plain \
+            --key-size 512 --hash sha512 -v luksFormat $PDEVICE
+        cat /scripts/casper-premount/user.secret | \
+            /usr/sbin/cryptsetup luksOpen $PDEVICE $PLABEL
+        /sbin/mke2fs -t ext4 -L $PLABEL /dev/mapper/$PLABEL
+	/usr/sbin/cryptsetup luksClose /dev/mapper/$PLABEL
+	while true; 
+		do echo "Please restart your computer now!"
+		plymouth message --text="Restarting your computer now..."; 
+		sleep 3; 
+		echo b >/proc/sysrq-trigger
+	done
+    fi
+done

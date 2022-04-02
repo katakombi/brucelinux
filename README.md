@@ -19,8 +19,10 @@ Features:
 
 ## Procedure
 
-* [Bootstrapping](BOOTSTRAP.md)
-
-* [Maintenance](MAINTENANCE.md)
-
-* [USB stick creation](USBSTICK.md)
+```
+./bootstrap.sh
+source init.sh
+./build.sh
+./vboxtest.sh
+./create-usbstick.sh
+```

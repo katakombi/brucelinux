@@ -45,5 +45,12 @@ apt autoremove -y
 msg ///clean package cache///
 apt clean
 
+msg ///enable numlock///
+sed -i.bak 's/NUMLOCK=auto/NUMLOCK=on/' /etc/default/numlockx
+
 msg ///update package list///
 dpkg-query --show --showformat='${Installed-Size}\t${Package}\n' | sort -rh > /packages.lst
+
+msg ///timezone and locales cfg///
+dpkg-reconfigure tzdata # select Europe/Berlin
+dpkg-reconfigure locales # mark de_DE.UTF-8 and en_US.UTF8; select de_DE.UTF-8 as default

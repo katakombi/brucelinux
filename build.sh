@@ -30,7 +30,7 @@ default vesamenu.c32
 timeout 33
 
 menu background boot.png
-menu title $BL_PROFILECAP Linux\\n$V - $D
+menu title $V - $D
 
 menu color screen       37;40      #80ffffff #00000000 std
 MENU COLOR border       30;44   #40ffffff #a0000000 std
@@ -70,8 +70,8 @@ sudo mkdir -p iso/etc/info
 echo "$V" | sudo tee iso/etc/info/version
 echo "$D" | sudo tee iso/etc/info/date
 
-sudo rsync -ravhlp config.global/ iso       # global files
-sudo rsync -ravhlp config/$BL_PROFILE/ iso  # profile-specific files/overrides
+sudo rsync -ravhlp --chown=root:root config.global/ iso       # global files
+sudo rsync -ravhlp --chown=root:root config/$BL_PROFILE/ iso  # profile-specific files/overrides
 
 echo ///PATCHING///
 
@@ -83,6 +83,10 @@ sudo sed -i 's|BL_USERKEYFILE|'${BL_USERKEYFILE#$BL_CHROOTDIR}'|' iso/etc/rc.loc
 sudo sed -i 's/BL_P4LABEL/'$BL_P4LABEL'/' iso/etc/rc.local
 sudo sed -i 's/BL_P4UUID/'$BL_P4UUID'/' iso/etc/crypttab
 sudo sed -i 's/BL_P4LABEL/'$BL_P4LABEL'/' iso/etc/crypttab
+
+sudo chroot iso sh -c 'systemctl enable rc-local'
+sudo chroot iso sh -c 'systemctl enable run-before-shutdown'
+sudo chroot iso sh -c 'systemctl enable run-before-reboot'
 
 # TODO make this independent of $PROFILE and adjust groups
 #USERGROUPS="disk,audio,video,users,dip,plugdev,scanner,davfs2,adm,sudo"
@@ -110,10 +114,11 @@ echo TODO
 
 echo ///BUILDING ISO FOR $V///
 
-#time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs # fast
+sudo rm -f extract-cd/casper/filesystem.squashfs
+time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs # fast
 #time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs -comp zstd -Xcompression-level 22 # medium fast and ok
 #time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs -b 1048576 -comp xz -Xdict-size 100% # extremely slow but 1.7G vs 2.1G
-time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs -comp zstd -b 256K -Xcompression-level 22 # faster decompression
+#time sudo mksquashfs iso extract-cd/casper/filesystem.squashfs -comp zstd -b 256K -Xcompression-level 22 # faster decompression
 
 sudo rm -rf extract-cd/MD5SUM 
 

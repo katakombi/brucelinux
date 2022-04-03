@@ -15,9 +15,9 @@ export BL_P2LABEL="BLSYSTEM"
 export BL_P3LABEL="BLRESCUE"
 export BL_P4LABEL="BLHOME"
 
-export BL_P1SIZE="100M"
-export BL_P2SIZE="9G"
-export BL_P3SIZE="9G"
+export BL_P1SIZE="100MiB"
+export BL_P2SIZE="9GiB"
+export BL_P3SIZE="9GiB"
 export BL_P4SIZE="" # use rest of available space
 
 export BL_P2UUID="f5cf619e-d1cb-4b7e-b8b8-f7d0dc3c37c0"

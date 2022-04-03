@@ -45,12 +45,12 @@ hostnamectl set-hostname $(cat /home/$USERNAME/.unique-hostname)
 
 # apply specific netcfg
 if [[ -r /etc/rc.local.d/$NETCFG.netcfg.sh ]]; then
-  source /etc/rc.local.d/$NETCFG.netcfg
+  source /etc/rc.local.d/$NETCFG.netcfg.sh
 fi
 
 # apply specific bootcfg
 if [[ -r /etc/rc.local.d/$BOOTCFG.bootcfg.sh ]]; then
-  source /etc/rc.local.d/$BOOTCFG.bootcfg
+  source /etc/rc.local.d/$BOOTCFG.bootcfg.sh
 fi
 
 # disable

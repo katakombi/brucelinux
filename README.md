@@ -20,8 +20,9 @@ Features:
 ## Procedure
 
 ```
+source ./init.sh
 ./bootstrap.sh
-source init.sh
+source ./init.sh
 ./build.sh
 ./vboxtest.sh
 ./create-usbstick.sh

@@ -14,20 +14,20 @@ if [[ "$bootcfg" == "vbox" ]]; then
 	echo "Booting ISO in VirtualBox mode..."
 	plymouth message --text="Using ISO in VirtualBox mode..."
 fi
-if [[ "$bootcfg" == "local" ]]; then
-	echo "Booting ISO from a local disk..."
-	plymouth message --text="Booting ISO from a local disk..."
+if [[ "$bootcfg" == "plain" ]]; then
+	echo "Booting ISO from an unencrypted local disk..."
+	plymouth message --text="Booting ISO from an unencrypted local disk..."
 fi
 if [[ "$bootcfg" == "pxe" ]]; then
 	echo "Booting ISO in PXE mode..."
         plymouth message --text="Using ISO in PXE boot mode..."
 fi
-if [[ "$bootcfg" == "mobile" ]]; then
+if [[ "$bootcfg" == "encrypted" ]]; then
 	echo "Waiting for encrypted partition on storage device..."
 	plymouth message --text="Waiting for encrypted partition on storage device..."
 
 	# loop until the device is available
-	while test ! -e /dev/disk/by-uuid/BL_P4UUID; do 
+	while test ! -e /dev/disk/by-uuid/BL_P2UUID; do 
 		echo "Waiting for partition UUID..."
 		plymouth message --text="Waiting for partition UUID..."
 		sleep 1

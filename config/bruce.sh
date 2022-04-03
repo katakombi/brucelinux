@@ -26,8 +26,8 @@ apt full-upgrade -y
 msg ///autoremove some packages///
 apt autoremove -y
 
-msg ///install latest 5.11 kernel///
-KPKG=$(apt-cache search linux generic image|grep -v unsigned|grep 5.11|sort|tail -n 1|awk '{print $1}')
+msg ///install latest 5.13 kernel///
+KPKG=$(apt-cache search linux generic image|grep -v unsigned|grep 5.13|sort|tail -n 1|awk '{print $1}')
 apt -y install $KPKG ${KPKG/-image-/-headers-}
 
 msg ///purge remaining kernel headers///

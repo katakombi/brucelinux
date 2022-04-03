@@ -41,7 +41,6 @@ sudo chroot $CHDIR su -c "dpkg-query --show --showformat='\${Installed-Size}\t\$
 sudo chroot $CHDIR su -c "cat /packages.lst | awk '{if ((\$1>0)&&NF==2) sum+=\$1}END{printf(i\"Total package size in kB: %i\n\", sum/1024)}'"
 
 echo Cleaning up
-sudo rm -rf $CHDIR/tmp/* $CHDIR/root/.bash_history
 sudo umount $CHDIR/dev/pts
 sudo umount $CHDIR/dev
 sudo umount $CHDIR/proc
